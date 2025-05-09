@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
+using BackgrounderWorker;
 using DeviceSpace;
 using SocketRoutes;
 using ProcessSpace;
@@ -31,7 +32,9 @@ class Program
         }
 
         ProcessPool pool = new();
-        pool.ViewAllHash();
+        // pool.ViewAllHash();
+        await BackgroundWorkers.StartProcessWorker();
+        
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");
         while (true)

@@ -4,12 +4,6 @@ using Newtonsoft.Json;
 
 namespace ProcessSpace {
 
-    public enum ProcessStatus {
-        FailedInitialization = -2,
-        Dead = -1,
-        Alive = 1
-    };
-
     public class ProcessPool {
 
         private UInt32 count = 0;
@@ -43,6 +37,47 @@ namespace ProcessSpace {
             }
         }
 
+        public Dictionary<string, ProcessGroup> GetCurrentShot() {
+            return this.processMap;
+        }
+
+        public Dictionary<string, ProcessGroup> GetReferenceShot() {
+            this.Init();
+            return this.processMap;
+        }
+
+        public void Update() {
+            this.processMap = this.GetReferenceShot();
+        }
+
+        public string? GetProcessGroupHash(string processName) {
+            if (this.processMap.ContainsKey(processName)) {
+                return this.processMap[processName].Hash;
+            }
+            return null;
+        }
+
+        public ProcessSnapshot? HasChanged(string processName, string processHash) {
+            if (!this.processMap.ContainsKey(processName)) {
+                return new ProcessSnapshot (
+                    processName,
+                    ProcessStatus.Alive
+                );
+            }
+
+            var group = this.processMap[processName]._group;
+            string prevHash = this.processMap[processName].Hash;
+            bool hasChanged = processHash != prevHash;
+            
+            if (hasChanged) {
+                return new ProcessSnapshot (
+                    processName,
+                    ProcessStatus.Alive
+                );
+            }
+            return null;
+        }
+
         protected ExecutionStatus Init() {
             List<Process> proclist = new List<Process>();
             UInt32 arrayBytesSize = this.count * sizeof(UInt32);
@@ -57,8 +92,12 @@ namespace ProcessSpace {
             UInt32 numIdsCopied = bytesCopied >> 2;
             for (UInt32 index = 0; index < numIdsCopied; index++)
             {
-                Process process = new Process(processIds[index]);
-                this.MapProcess(process);
+                try {
+                    Process process = new Process(processIds[index]);
+                    this.MapProcess(process);
+                } catch (ArgumentException e) {
+                    continue;
+                }
             }
 
             return ExecutionStatus.Success;

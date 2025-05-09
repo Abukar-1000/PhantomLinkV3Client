@@ -3,6 +3,7 @@ using Microsoft.Win32.SafeHandles;
 using System.IO.Hashing;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
+using System.ComponentModel;
 
 namespace ProcessSpace {
 
@@ -17,6 +18,25 @@ namespace ProcessSpace {
             get => _hash;
         }
 
+        public bool IsRunning 
+        {
+            get => CheckIfRunning();
+        }
+
+        protected bool CheckIfRunning() {
+            try {
+                IntPtr processHandle = this.process.Handle;
+                uint exitCode;
+                GetExitCodeProcess(processHandle, out exitCode);
+                return exitCode == (uint) 259;
+            }
+            catch (NotSupportedException) {
+                return true;
+            } catch {
+                return false;
+            }
+        }
+
         [DllImport("psapi.dll", BestFitMapping = false, CharSet = CharSet.Auto, SetLastError = true)]
         private static extern int GetModuleFileNameEx(
             SafeProcessHandle processHandle, 
@@ -24,6 +44,10 @@ namespace ProcessSpace {
             StringBuilder baseName, 
             int size
         );
+
+        [DllImport("kernel32.dll", SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        static extern bool GetExitCodeProcess(IntPtr hProcess, out uint lpExitCode);
 
         public Process(Process process) {
             this.processId = process.processId;

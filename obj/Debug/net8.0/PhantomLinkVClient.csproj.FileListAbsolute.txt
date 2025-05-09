@@ -79,3 +79,4 @@ C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\obj\Debug\net8.0\PhantomLinkV
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\obj\Debug\net8.0\ref\PhantomLinkVClient.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\System.IO.Hashing.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\obj\Debug\net8.0\PhantomLinkVClient.sourcelink.json
