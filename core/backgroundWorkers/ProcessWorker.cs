@@ -1,32 +1,22 @@
 using ProcessSpace;
 
 namespace BackgrounderWorker {
-    public static class ProcessWorker {
+    public class ProcessWorker {
 
-        // remove
-        public static List<ProcessSnapshot>? CheckForDeadProcesses(
-            ProcessPool oldPool,
-            ProcessPool currentPool
-        ) {
+        protected List<ProcessSnapshot>? CheckForDeadProcesses(ProcessPool monitor) {
             List<ProcessSnapshot> deadChanges = new();
             
-            var current = currentPool.GetCurrentShot();
-            var old = oldPool.GetCurrentShot();
-
-            foreach (var pair in current) {
+            foreach (var pair in monitor.GetCurrentShot()) {
                 string processGroup = pair.Key;
                 string currentGroupHash = pair.Value.Hash;
-                
-                SnapshotStatus status = ProcessWorker.GetSnapshotStatus(
-                    processGroup,
-                    old,
-                    current
-                );
+                var group = pair.Value._group;
 
-                if (status == SnapshotStatus.InOld) {
+                bool isActive = group.All(process => process.IsRunning == false);
+                if (isActive) {
                     deadChanges.Add(new ProcessSnapshot(
                         processGroup,
-                        ProcessStatus.Dead
+                        ProcessStatus.Dead,
+                        pair.Value
                     ));
                 }
             }
@@ -38,48 +28,24 @@ namespace BackgrounderWorker {
             return deadChanges;
         }
 
-        // remove
-        public static List<ProcessSnapshot>? CheckForNewProcesses(
-            ProcessPool oldPool,
-            ProcessPool currentPool
-        ) {
+        protected List<ProcessSnapshot>? CheckForNewProcesses(ProcessPool monitor) {
             List<ProcessSnapshot> newChanges = new();
 
-            var current = currentPool.GetCurrentShot();
-            var old = oldPool.GetCurrentShot();
-
-            foreach (var pair in current) {
+            foreach (var pair in monitor.GetCurrentShot()) {
                 string processGroup = pair.Key;
                 string currentGroupHash = pair.Value.Hash;
-                
-                SnapshotStatus status = ProcessWorker.GetSnapshotStatus(
-                    processGroup,
-                    old,
-                    current
-                );
+                var group = pair.Value._group;
 
-                string oldHash = oldPool.GetProcessGroupHash(processGroup) ?? "";
-                string currentHash = currentPool.GetProcessGroupHash(processGroup) ?? "";
-                bool isOutdatedHash = currentHash != oldHash;
-
-                if (status == SnapshotStatus.InBoth) {
-                    continue;
-                }
-
-                if (status == SnapshotStatus.InCurrent) {
+                bool isActive = group.Any(process => process.IsRunning);
+                if (isActive) {
                     newChanges.Add(new ProcessSnapshot(
                         processGroup,
-                        ProcessStatus.Alive
-                    ));
-                }
-                else if (isOutdatedHash && status != SnapshotStatus.InOld) {
-                    newChanges.Add(new ProcessSnapshot(
-                        processGroup,
-                        ProcessStatus.Alive
+                        ProcessStatus.Alive,
+                        pair.Value
                     ));
                 }
             }
-
+            
             if (newChanges.Count == 0) {
                 return null;
             }
@@ -87,6 +53,7 @@ namespace BackgrounderWorker {
             return newChanges;
         }
 
+        // remove
         public static SnapshotStatus GetSnapshotStatus(
             string processName,
             Dictionary<string, ProcessGroup> old,
@@ -110,27 +77,29 @@ namespace BackgrounderWorker {
             return SnapshotStatus.Undecided;
         }
 
-        public static async Task StartProcessMonitor(bool running) {
-            const int delay = 1000 * 10;
+        public async Task StartProcessMonitor(bool running) {
+            const int delay = 10;
             ProcessPool monitor = new();
 
             while (running) {
                 
                 Console.WriteLine($"\n\n\n\n\n\n\n\n\n");
                 monitor.Update();
-                foreach (var pair in monitor.GetCurrentShot()) {
-                    string processGroup = pair.Key;
-                    string currentGroupHash = pair.Value.Hash;
-                    var group = pair.Value._group;
+                List<ProcessSnapshot>? newProcesses = this.CheckForNewProcesses(monitor);
+                List<ProcessSnapshot>? deadProcesses = this.CheckForDeadProcesses(monitor);
 
-                    bool isActive = group.Any(process => process.IsRunning);
-                    if (isActive) {
-                        Console.WriteLine($"[+] \tName:\t{processGroup} Active");
-                    }
-                    else {
-                        Console.WriteLine($"[+] \tName:\t{processGroup} Inactive");
+                if (newProcesses is not null) {
+                    foreach (ProcessSnapshot processSnapshot in newProcesses) {
+                        Console.WriteLine($"[+] \tName:\t{processSnapshot.processName} Active");
                     }
                 }
+
+                if (deadProcesses is not null) {
+                    foreach (ProcessSnapshot processSnapshot in deadProcesses) {
+                        Console.WriteLine($"[-] \tName:\t{processSnapshot.processName} Inactive");
+                    }
+                }
+                
                 await Task.Delay(delay);
             }
         }

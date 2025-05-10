@@ -31,9 +31,8 @@ class Program
             Console.WriteLine($"Connection error: {ex.Message}");
         }
 
-        ProcessPool pool = new();
-        // pool.ViewAllHash();
-        await BackgroundWorkers.StartProcessWorker();
+        BackgroundWorkers workers = new BackgroundWorkers();
+        await workers.StartProcessWorker();
         
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");

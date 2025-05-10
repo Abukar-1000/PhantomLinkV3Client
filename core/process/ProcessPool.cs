@@ -57,27 +57,6 @@ namespace ProcessSpace {
             return null;
         }
 
-        public ProcessSnapshot? HasChanged(string processName, string processHash) {
-            if (!this.processMap.ContainsKey(processName)) {
-                return new ProcessSnapshot (
-                    processName,
-                    ProcessStatus.Alive
-                );
-            }
-
-            var group = this.processMap[processName]._group;
-            string prevHash = this.processMap[processName].Hash;
-            bool hasChanged = processHash != prevHash;
-            
-            if (hasChanged) {
-                return new ProcessSnapshot (
-                    processName,
-                    ProcessStatus.Alive
-                );
-            }
-            return null;
-        }
-
         protected ExecutionStatus Init() {
             List<Process> proclist = new List<Process>();
             UInt32 arrayBytesSize = this.count * sizeof(UInt32);

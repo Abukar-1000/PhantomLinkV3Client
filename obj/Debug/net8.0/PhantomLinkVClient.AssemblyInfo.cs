@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("PhantomLinkVClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+99930cb43d92852e38705a7809b7e858e13c4361")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9971aefa7409445e77f4220c62129d8407bcc254")]
 [assembly: System.Reflection.AssemblyProductAttribute("PhantomLinkVClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("PhantomLinkVClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

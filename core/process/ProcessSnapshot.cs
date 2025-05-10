@@ -17,10 +17,16 @@ namespace ProcessSpace {
     public class ProcessSnapshot {
         public string processName;
         public ProcessStatus status;
+        public ProcessGroup group;
         public ProcessSnapshot() {}
-        public ProcessSnapshot(string processName, ProcessStatus status) {
+        public ProcessSnapshot(
+            string processName, 
+            ProcessStatus status, 
+            ProcessGroup group
+        ) {
             this.processName = processName;
             this.status = status;
+            this.group = group;
         }
     }
 }

@@ -31,26 +31,5 @@ namespace ProcessSpace {
             _referencePool = new(ProcessCount);
             _channel = Channel.CreateUnbounded<ProcessGroup>();
         }
-        
-        public List<ProcessSnapshot>? CheckForNewProcesses() {
-            List<ProcessSnapshot> _new = new();
-            Dictionary<string, ProcessGroup> referenceShot = _referencePool.GetReferenceShot();
-            
-            foreach (var pair in referenceShot) {
-                string processGroup = pair.Key;
-                string currentGroupHash = pair.Value.Hash;
-                
-                ProcessSnapshot? snapshot = _pool.HasChanged(processGroup, currentGroupHash);
-                bool isOutOfDate = snapshot is not null;
-                if (isOutOfDate) {
-                    _new.Add(snapshot);
-                }
-            }
-
-            if (_new.Count == 0) {
-                return null;
-            }
-            return _new;
-        }
     }
 }
