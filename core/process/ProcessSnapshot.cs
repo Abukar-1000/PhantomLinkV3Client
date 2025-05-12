@@ -15,6 +15,7 @@ namespace ProcessSpace {
     };
 
     public class ProcessSnapshot {
+        public string deviceID;
         public string processName;
         public ProcessStatus status;
         public ProcessGroup group;
@@ -22,11 +23,13 @@ namespace ProcessSpace {
         public ProcessSnapshot(
             string processName, 
             ProcessStatus status, 
-            ProcessGroup group
+            ProcessGroup group,
+            string deviceID
         ) {
             this.processName = processName;
             this.status = status;
             this.group = group;
+            this.deviceID = deviceID;
         }
     }
 }

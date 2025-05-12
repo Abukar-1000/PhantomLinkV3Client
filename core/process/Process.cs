@@ -13,6 +13,11 @@ namespace ProcessSpace {
         public string name = "UNKNOWN";
         
         private string _hash;
+        public UInt32 ID 
+        {
+            get => processId;
+        }
+
         public string Hash
         {
             get => _hash;

@@ -12,5 +12,6 @@ namespace SocketRoutes {
 
         [Description("Server Control Route")]
         public static string control = BaseRoutes.Server + "/socket";
+        public static string proccess = BaseRoutes.Server + "/process";
     }
 }
