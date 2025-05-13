@@ -80,3 +80,9 @@ C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\obj\Debug\net8.0\ref\PhantomL
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Newtonsoft.Json.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\System.IO.Hashing.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\obj\Debug\net8.0\PhantomLinkVClient.sourcelink.json
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.AspNetCore.Http.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Abstractions.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.AspNetCore.Http.Features.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.AspNetCore.WebUtilities.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Net.Http.Headers.dll
