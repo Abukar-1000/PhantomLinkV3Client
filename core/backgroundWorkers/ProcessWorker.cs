@@ -110,6 +110,16 @@ namespace BackgrounderWorker {
                 Console.WriteLine($"Got: {message}");
             });
 
+            _connection?.On<string>("ProcessKillRequest", (frame) =>
+            {
+                Console.WriteLine($"Kill request Got: {frame}");
+            });
+
+            _connection?.On<ProcessKillFrame>("ProcessKillRequest", (frame) =>
+            {
+                Console.WriteLine($"Kill request Got: {frame.processName}");
+            });
+
             while (true) {
 
                 if (_params.running) {
@@ -124,14 +134,12 @@ namespace BackgrounderWorker {
                     if (newProcesses is not null) {
                         foreach (ProcessSnapshot processSnapshot in newProcesses) {
                             await _connection?.InvokeAsync("UpdateProcess", new ProcessUpdateFrame(processSnapshot));
-                            // Console.WriteLine($"[+]ID:\t{processSnapshot.deviceID} \tName:\t{processSnapshot.processName} Active");
                         }
                     }
 
                     if (deadProcesses is not null) {
                         foreach (ProcessSnapshot processSnapshot in deadProcesses) {
                             await _connection?.InvokeAsync("UpdateProcess", new ProcessUpdateFrame(processSnapshot));
-                            // Console.WriteLine($"[-]ID:\t{processSnapshot.deviceID}\tName:\t{processSnapshot.processName} Inactive");
                         }
                     }
                     
