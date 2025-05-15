@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.IO.Hashing;
 using System.Text;
 
@@ -44,5 +45,6 @@ namespace ProcessSpace {
             });
             return groupHash;
         }
+
     }
 }

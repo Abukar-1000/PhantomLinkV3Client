@@ -4,6 +4,7 @@ using System.IO.Hashing;
 using System.Text;
 using System.Diagnostics.CodeAnalysis;
 using System.ComponentModel;
+using System.Diagnostics;
 
 namespace ProcessSpace {
 
@@ -56,7 +57,7 @@ namespace ProcessSpace {
 
         public Process(Process process) {
             this.processId = process.processId;
-            this.process = GetProcessById((int) processId);
+            this.process = GetProcessById((int) process.processId);
             this.name = process.ProcessName;
             this._hash = GetHash();
         }
@@ -72,12 +73,9 @@ namespace ProcessSpace {
             return this.processId;
         }
 
-        public void kill(bool killChildren = false) {
-            if (this.process is null) {
-                throw new InvalidOperationException("Kill failed, process not instantiated.");
-            }
-            
-            this.process.Kill(killChildren);
+        public static System.Diagnostics.Process CreateProcess(int processId) {
+            var process = GetProcessById(processId);
+            return process;
         }
 
         // Lol fix this!

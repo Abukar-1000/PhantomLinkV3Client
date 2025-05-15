@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 
@@ -80,6 +81,55 @@ namespace ProcessSpace {
             }
 
             return ExecutionStatus.Success;
+        }
+
+        public ExecutionStatus Kill(string processName, bool killChildren = false) {
+            ExecutionStatus executionStatus = ExecutionStatus.Success;
+            Console.WriteLine("\n\n");
+            try {
+                UInt32 arrayBytesSize = this.count * sizeof(UInt32);
+                UInt32[] processIds = new UInt32[this.count];
+                UInt32 bytesCopied;
+
+                bool success = EnumProcesses(processIds, arrayBytesSize, out bytesCopied);
+                if (success is false) {
+                    return ExecutionStatus.Failed;
+                }
+
+                UInt32 numIdsCopied = bytesCopied >> 2;
+                for (UInt32 index = 0; index < numIdsCopied; index++)
+                {
+                    try {
+                        System.Diagnostics.Process process = Process.CreateProcess((int) processIds[index]);
+                        if (process.ProcessName == processName) {
+                            process.Kill();
+                        }
+                    } catch (ArgumentException e) {
+                        continue;
+                    }
+                }
+                
+            }
+            catch (Win32Exception ex) {
+                Console.WriteLine(ex);
+                executionStatus = ExecutionStatus.Failed;
+            }
+            catch (NotSupportedException ex) {
+                Console.WriteLine(ex);
+                executionStatus = ExecutionStatus.Failed;
+            }
+            catch (InvalidOperationException ex) {
+                Console.WriteLine(ex);
+                Console.WriteLine("\n\nLol");
+                executionStatus = ExecutionStatus.Failed;
+            }
+            catch (AggregateException ex) {
+                Console.WriteLine(ex);
+                executionStatus = ExecutionStatus.Failed;
+            }
+            Console.WriteLine("\n\n");
+
+            return executionStatus;
         }
 
         public ProcessPool(string name) {}

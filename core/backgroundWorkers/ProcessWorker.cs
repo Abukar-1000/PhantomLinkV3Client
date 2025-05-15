@@ -110,14 +110,11 @@ namespace BackgrounderWorker {
                 Console.WriteLine($"Got: {message}");
             });
 
-            _connection?.On<string>("ProcessKillRequest", (frame) =>
-            {
-                Console.WriteLine($"Kill request Got: {frame}");
-            });
-
-            _connection?.On<ProcessKillFrame>("ProcessKillRequest", (frame) =>
+            _connection?.On<ProcessKillFrame>("ProcessKillRequest", async (frame) =>
             {
                 Console.WriteLine($"Kill request Got: {frame.processName}");
+                ProcessPool killMonitor = new();
+                await KillProcess(frame, killMonitor, _connection);
             });
 
             while (true) {
@@ -146,6 +143,23 @@ namespace BackgrounderWorker {
                 }
                 await Task.Delay(delay);
             }
+        }
+
+        protected async Task KillProcess(
+            ProcessKillFrame frame, 
+            ProcessPool pool,
+            HubConnection? connection
+        ) {
+            var snapshot = pool.GetCurrentShot();
+            
+            // handle process no longer exists
+            ExecutionStatus executionStatus = pool.Kill(frame.processName);
+            int status = executionStatus == ExecutionStatus.Success ? 
+                                                (int) StatusCodes.Status200OK :
+                                                (int) StatusCodes.Status500InternalServerError; 
+
+            ProcessKillFrameResponse response = new ProcessKillFrameResponse(frame, status);
+            await connection?.InvokeAsync("KillProcessResponse", response);
         }
 
         protected async Task<bool> IsRegistered() {
