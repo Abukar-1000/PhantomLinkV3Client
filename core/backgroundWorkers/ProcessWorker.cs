@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.SignalR.Client;
 using ProcessSpace;
 using ProcessSpace.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http;
 using SocketRoutes;
 using System.Net;
+using Register.Models;
 
 namespace BackgrounderWorker {
     public class ProcessWorker {
@@ -155,8 +155,8 @@ namespace BackgrounderWorker {
             // handle process no longer exists
             ExecutionStatus executionStatus = pool.Kill(frame.processName);
             int status = executionStatus == ExecutionStatus.Success ? 
-                                                (int) StatusCodes.Status200OK :
-                                                (int) StatusCodes.Status500InternalServerError; 
+                                                StatusCodes.Status200OK :
+                                                StatusCodes.Status500InternalServerError; 
 
             ProcessKillFrameResponse response = new ProcessKillFrameResponse(frame, status);
             await connection?.InvokeAsync("KillProcessResponse", response);
@@ -165,7 +165,9 @@ namespace BackgrounderWorker {
         protected async Task<bool> IsRegistered() {
             bool registered = false;
             var _connection = await ConnectToControlHub();
-            await _connection?.InvokeAsync("RegisterDevice", new Device());
+
+            RegisterFrame _device = new Device().GetData(); 
+            await _connection?.InvokeAsync("RegisterDevice", _device);
 
             _connection?.On<int>("RegisterResponse", (status) =>
             {

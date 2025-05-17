@@ -86,3 +86,4 @@ C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.As
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.AspNetCore.WebUtilities.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Net.Http.Headers.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Emgu.CV.dll

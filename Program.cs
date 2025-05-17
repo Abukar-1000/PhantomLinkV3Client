@@ -33,6 +33,8 @@ class Program
 
         BackgroundWorkers workers = new BackgroundWorkers();
         await workers.StartProcessWorker();
+        // Device device = new Device();
+        // device.displayInfo();
         
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");
