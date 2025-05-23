@@ -32,7 +32,8 @@ class Program
         }
 
         BackgroundWorkers workers = new BackgroundWorkers();
-        await workers.StartProcessWorker();
+        workers.StartProcessWorker();
+        await workers.StartScreenMonitor();
         // Device device = new Device();
         // device.displayInfo();
         

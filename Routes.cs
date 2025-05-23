@@ -12,6 +12,11 @@ namespace SocketRoutes {
 
         [Description("Server Control Route")]
         public static string control = BaseRoutes.Server + "/socket";
+
+        [Description("Server Process Management Route")]
         public static string proccess = BaseRoutes.Server + "/process";
+
+        [Description("Server Screen Monitoring Route")]
+        public static string screenBroadcasterWorker = BaseRoutes.Server + "/screenBrodcast";
     }
 }

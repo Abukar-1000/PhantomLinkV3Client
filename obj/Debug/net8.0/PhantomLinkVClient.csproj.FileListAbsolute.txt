@@ -87,3 +87,7 @@ C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.As
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Net.Http.Headers.dll
 C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Emgu.CV.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\Microsoft.Win32.SystemEvents.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\System.Drawing.Common.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\System.Private.Windows.Core.dll
+C:\Users\Abuka\OneDrive\Desktop\PhantomLinkVClient\bin\Debug\net8.0\runtimes\win\lib\net8.0\Microsoft.Win32.SystemEvents.dll

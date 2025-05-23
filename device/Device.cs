@@ -5,7 +5,7 @@ using Register.Models;
 
 namespace DeviceSpace {
 
-    public class Device
+    public class Device: IDevice
     {
 
         protected string name = Environment.MachineName;

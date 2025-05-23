@@ -3,30 +3,36 @@ using Microsoft.AspNetCore.SignalR.Client;
 using ProcessSpace;
 using ProcessSpace.Models;
 using Microsoft.AspNetCore.Http;
-using SocketRoutes;
-using System.Net;
-using Register.Models;
 
 namespace BackgrounderWorker {
-    public class ProcessWorker {
+    public class ProcessWorker : BackgroundWorkerBase
+    {
         protected readonly Dictionary<string, ProcessSnapshot> _lookUp;
         protected readonly ProcessWorkerParams _params;
         protected readonly Device _device;
 
-        public ProcessWorker() {
+        public ProcessWorker()
+        {
             _lookUp = new();
             _device = new();
         }
 
-        public ProcessWorker(ProcessWorkerParams parameters) {
+        public ProcessWorker(
+            ProcessWorkerParams parameters,
+            Device device
+        )
+            : base(parameters, device)
+        {
             _lookUp = new();
             _device = new();
             _params = parameters;
         }
 
-        protected bool HasChanged(ProcessSnapshot snapshot) {
+        protected bool HasChanged(ProcessSnapshot snapshot)
+        {
             bool isNewGroup = _lookUp.ContainsKey(snapshot.processName) == false;
-            if (isNewGroup) {
+            if (isNewGroup)
+            {
                 return true;
             }
 
@@ -35,16 +41,19 @@ namespace BackgrounderWorker {
             return activeStateChanged;
         }
 
-        protected List<ProcessSnapshot>? CheckForDeadProcesses(ProcessPool monitor) {
+        protected List<ProcessSnapshot>? CheckForDeadProcesses(ProcessPool monitor)
+        {
             List<ProcessSnapshot> deadChanges = new();
-            
-            foreach (var pair in monitor.GetCurrentShot()) {
+
+            foreach (var pair in monitor.GetCurrentShot())
+            {
                 string processGroup = pair.Key;
                 string currentGroupHash = pair.Value.Hash;
                 var group = pair.Value._group;
 
                 bool isDead = group.All(process => process.IsRunning == false);
-                if (isDead) {
+                if (isDead)
+                {
                     ProcessSnapshot snapshot = new ProcessSnapshot(
                         processGroup,
                         ProcessStatus.Dead,
@@ -53,30 +62,35 @@ namespace BackgrounderWorker {
                     );
 
                     bool isNewChange = this.HasChanged(snapshot);
-                    if (isNewChange) {
+                    if (isNewChange)
+                    {
                         deadChanges.Add(snapshot);
                         _lookUp[snapshot.processName] = snapshot;
                     }
                 }
             }
 
-            if (deadChanges.Count == 0) {
+            if (deadChanges.Count == 0)
+            {
                 return null;
             }
 
             return deadChanges;
         }
 
-        protected List<ProcessSnapshot>? CheckForNewProcesses(ProcessPool monitor) {
+        protected List<ProcessSnapshot>? CheckForNewProcesses(ProcessPool monitor)
+        {
             List<ProcessSnapshot> newChanges = new();
 
-            foreach (var pair in monitor.GetCurrentShot()) {
+            foreach (var pair in monitor.GetCurrentShot())
+            {
                 string processGroup = pair.Key;
                 string currentGroupHash = pair.Value.Hash;
                 var group = pair.Value._group;
 
                 bool isActive = group.Any(process => process.IsRunning);
-                if (isActive) {
+                if (isActive)
+                {
                     ProcessSnapshot snapshot = new ProcessSnapshot(
                         processGroup,
                         ProcessStatus.Alive,
@@ -85,21 +99,24 @@ namespace BackgrounderWorker {
                     );
 
                     bool isNewChange = this.HasChanged(snapshot);
-                    if (isNewChange) {
+                    if (isNewChange)
+                    {
                         newChanges.Add(snapshot);
                         _lookUp[snapshot.processName] = snapshot;
                     }
                 }
             }
-            
-            if (newChanges.Count == 0) {
+
+            if (newChanges.Count == 0)
+            {
                 return null;
             }
 
             return newChanges;
         }
 
-        public async Task StartProcessMonitor() {
+        public async Task StartProcessMonitor()
+        {
             const int delay = 10;
             ProcessPool monitor = new();
             var _connection = await ConnectToHub();
@@ -117,101 +134,58 @@ namespace BackgrounderWorker {
                 await KillProcess(frame, killMonitor, _connection);
             });
 
-            while (true) {
+            while (true)
+            {
 
-                if (_params.running) {
+                if (_params.running)
+                {
                     monitor.Update();
                     List<ProcessSnapshot>? newProcesses = this.CheckForNewProcesses(monitor);
                     List<ProcessSnapshot>? deadProcesses = this.CheckForDeadProcesses(monitor);
 
-                    if (newProcesses is not null || deadProcesses is not null) {
+                    if (newProcesses is not null || deadProcesses is not null)
+                    {
                         Console.WriteLine($"\n\n\n");
                     }
 
-                    if (newProcesses is not null) {
-                        foreach (ProcessSnapshot processSnapshot in newProcesses) {
+                    if (newProcesses is not null)
+                    {
+                        foreach (ProcessSnapshot processSnapshot in newProcesses)
+                        {
                             await _connection?.InvokeAsync("UpdateProcess", new ProcessUpdateFrame(processSnapshot));
                         }
                     }
 
-                    if (deadProcesses is not null) {
-                        foreach (ProcessSnapshot processSnapshot in deadProcesses) {
+                    if (deadProcesses is not null)
+                    {
+                        foreach (ProcessSnapshot processSnapshot in deadProcesses)
+                        {
                             await _connection?.InvokeAsync("UpdateProcess", new ProcessUpdateFrame(processSnapshot));
                         }
                     }
-                    
+
                 }
                 await Task.Delay(delay);
             }
         }
 
         protected async Task KillProcess(
-            ProcessKillFrame frame, 
+            ProcessKillFrame frame,
             ProcessPool pool,
             HubConnection? connection
-        ) {
+        )
+        {
             var snapshot = pool.GetCurrentShot();
-            
+
             // handle process no longer exists
             ExecutionStatus executionStatus = pool.Kill(frame.processName);
-            int status = executionStatus == ExecutionStatus.Success ? 
+            int status = executionStatus == ExecutionStatus.Success ?
                                                 StatusCodes.Status200OK :
-                                                StatusCodes.Status500InternalServerError; 
+                                                StatusCodes.Status500InternalServerError;
 
             ProcessKillFrameResponse response = new ProcessKillFrameResponse(frame, status);
             await connection?.InvokeAsync("KillProcessResponse", response);
         }
-
-        protected async Task<bool> IsRegistered() {
-            bool registered = false;
-            var _connection = await ConnectToControlHub();
-
-            RegisterFrame _device = new Device().GetData(); 
-            await _connection?.InvokeAsync("RegisterDevice", _device);
-
-            _connection?.On<int>("RegisterResponse", (status) =>
-            {
-                Console.WriteLine($"Register response:\t{status}");
-                registered = status == StatusCodes.Status200OK || status == StatusCodes.Status201Created;
-            });
-
-            return registered;
-        }
-
-        protected async Task<HubConnection?> ConnectToControlHub() {
-            Console.WriteLine($"Connecting to hub {_params.route}");
-            var hub = new HubConnectionBuilder()
-                        .WithUrl(_params.controlRoute)
-                        .WithAutomaticReconnect()
-                        .Build();
-            try {
-                await hub.StartAsync();
-                return hub;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Connection error: {ex.Message}");
-            }
-
-            return null;
-        }
-
-        protected async Task<HubConnection?> ConnectToHub() {
-            Console.WriteLine($"Connecting to hub {_params.route}");
-            var hub = new HubConnectionBuilder()
-                        .WithUrl(_params.route)
-                        .WithAutomaticReconnect()
-                        .Build();
-            try {
-                await hub.StartAsync();
-                return hub;
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Connection error: {ex.Message}");
-            }
-
-            return null;
-        }
+        
     }
 }
