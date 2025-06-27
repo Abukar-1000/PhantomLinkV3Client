@@ -30,12 +30,33 @@ namespace BackgrounderWorker {
 
         public async Task StartProcessWorker()
         {
-            await Task.Run(async () => await this.processWorker.StartProcessMonitor());
+            await this.HandleUnexpectedError(
+                async () => await Task.Run(async () => await this.processWorker.StartProcessMonitor()),
+                this.processWorkerParams
+            );
         }
-        
+
         public async Task StartScreenMonitor()
         {
-            await Task.Run(async () => await this.screenBroadcasterWorker.StartScreenMonitor());
+            await this.HandleUnexpectedError(
+                async () => await Task.Run(async () => await this.screenBroadcasterWorker.StartScreenMonitor()),
+                this.screenBroadcasterWorkerParams
+            );
+        }
+
+        protected async Task HandleUnexpectedError(Func<Task> worker, IBackgroundWorkerParams _params)
+        {
+            while (true)
+            {
+                try
+                {
+                    await worker();
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"\n\n[{_params.route}] failed with exception \n{ex.Message}");
+                }
+            }
         }
     }
 }

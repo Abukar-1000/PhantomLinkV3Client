@@ -59,6 +59,13 @@ namespace BackgrounderWorker
                         .WithUrl(_params.route)
                         .WithAutomaticReconnect()
                         .Build();
+
+            // hub.Closed += async (err) =>
+            // {
+            //     Console.WriteLine($"Hub Closed! {_params.route}\n");
+            //     await this.HandleReconnect(err, hub, _params);
+            // };
+
             try
             {
                 await hub.StartAsync();
@@ -71,12 +78,30 @@ namespace BackgrounderWorker
 
             return null;
         }
-        
-        public async Task<bool> IsRegistered() {
+
+        protected async Task HandleReconnect(
+            Exception? exception,
+            HubConnection? connection,
+            IBackgroundWorkerParams parameters
+        )
+        {
+            Console.WriteLine($"Worker [{parameters.controlRoute}] Failed with error:\n\n{exception.Message} \nAttempting to reconnect.");
+            try
+            {
+                await connection?.StartAsync();
+            }
+            catch (Exception e)
+            { 
+                Console.WriteLine($"Failed to reconnect with exception: {e.Message}");
+            }
+        }
+
+        public async Task<bool> IsRegistered()
+        {
             bool registered = false;
             var _connection = await ConnectToControlHub();
 
-            RegisterFrame _device = this._device.GetData(); 
+            RegisterFrame _device = this._device.GetData();
             await _connection?.InvokeAsync("RegisterDevice", _device);
 
             _connection?.On<int>("RegisterResponse", (status) =>
