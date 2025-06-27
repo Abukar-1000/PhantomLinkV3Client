@@ -5,7 +5,13 @@ using BackgrounderWorker;
 using DeviceSpace;
 using SocketRoutes;
 using ProcessSpace;
-
+/*
+    - Limit frame creation in Screen broadcast => should limit ram usage
+    - Implement mouse movement
+    - Implement key logger => encapsulate in KeyboardBackgroundWorker 
+    - Implement background usage controles => on/off
+    - Add CPU, Memory, Disk, Network, GPU Usage broadcast => All encapsed in Hardware
+*/
 class Program
 {
     static async Task Main(string[] args)
@@ -34,8 +40,6 @@ class Program
         BackgroundWorkers workers = new BackgroundWorkers();
         workers.StartProcessWorker();
         await workers.StartScreenMonitor();
-        // Device device = new Device();
-        // device.displayInfo();
         
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");

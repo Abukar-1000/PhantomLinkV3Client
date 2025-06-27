@@ -28,40 +28,31 @@ namespace DisplaySpace
 
         public async Task StartScreenMonitor()
         {
+            const int FRAME_BUFFER_SIZE = 120;
             RegisterFrame registerFrame = _device.GetData();
             string id = registerFrame.id;
             Dimension deviceDimensions = registerFrame.display.dimension;
-            Console.WriteLine($"Screen thread!!! \t{_params.running}");
             var _connection = await ConnectToHub();
             bool isRegistered = await IsRegistered();
+
+            var frameFactory = new FlyWeightScreenFrameFactory(
+                deviceDimensions.width,
+                deviceDimensions.height,
+                FRAME_BUFFER_SIZE,
+                id
+            );
 
             while (true)
             {
                 if (_params.running)
                 {
-                    using (var bitmap = new Bitmap(deviceDimensions.width, deviceDimensions.height))
-                    {
-                        using (var graphics = Graphics.FromImage(bitmap))
-                        {
-                            graphics.CopyFromScreen(0, 0, 0, 0, bitmap.Size);    
-                            using (var stream = new MemoryStream())
-                            {
-                                bitmap.Save(stream, ImageFormat.Jpeg);
-                                ScreenFrame frame = new ScreenFrame(
-                                    Convert.ToBase64String(stream.ToArray()),
-                                    deviceDimensions.width,
-                                    deviceDimensions.height,
-                                    id
-                                );
-
-                                await _connection?.InvokeAsync("BrodcastFrame", frame);
-                            }
-                        }
-                    }
+                    ScreenFrame frame = frameFactory.GetFrame();
+                    await _connection?.InvokeAsync("BrodcastFrame", frame);
+                    frameFactory.Next();
 
                     if (_params.running is false)
-                    { 
-                        await Task.Delay(1);
+                    {
+                        await Task.Delay(10);
                     }
                 }
             }

@@ -17,12 +17,8 @@ namespace BackgrounderWorker {
         public BackgroundWorkers()
         {
             device = new Device();
-            processWorkerParams = new ProcessWorkerParams(
-                true
-            );
-            screenBroadcasterWorkerParams = new ScreenBroadcasterWorkerParams(
-                true
-            );
+            processWorkerParams = new ProcessWorkerParams(true);
+            screenBroadcasterWorkerParams = new ScreenBroadcasterWorkerParams(true);
 
             this.processWorker = new ProcessWorker(processWorkerParams, device);
             this.screenBroadcasterWorker = new ScreenBroadcasterWorker(screenBroadcasterWorkerParams, device);

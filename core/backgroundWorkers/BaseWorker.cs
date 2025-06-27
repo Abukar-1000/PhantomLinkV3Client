@@ -60,12 +60,6 @@ namespace BackgrounderWorker
                         .WithAutomaticReconnect()
                         .Build();
 
-            // hub.Closed += async (err) =>
-            // {
-            //     Console.WriteLine($"Hub Closed! {_params.route}\n");
-            //     await this.HandleReconnect(err, hub, _params);
-            // };
-
             try
             {
                 await hub.StartAsync();
@@ -77,23 +71,6 @@ namespace BackgrounderWorker
             }
 
             return null;
-        }
-
-        protected async Task HandleReconnect(
-            Exception? exception,
-            HubConnection? connection,
-            IBackgroundWorkerParams parameters
-        )
-        {
-            Console.WriteLine($"Worker [{parameters.controlRoute}] Failed with error:\n\n{exception.Message} \nAttempting to reconnect.");
-            try
-            {
-                await connection?.StartAsync();
-            }
-            catch (Exception e)
-            { 
-                Console.WriteLine($"Failed to reconnect with exception: {e.Message}");
-            }
         }
 
         public async Task<bool> IsRegistered()
