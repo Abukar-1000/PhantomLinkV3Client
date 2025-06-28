@@ -177,7 +177,6 @@ namespace BackgrounderWorker {
         {
             var snapshot = pool.GetCurrentShot();
 
-            // handle process no longer exists
             ExecutionStatus executionStatus = pool.Kill(frame.processName);
             int status = executionStatus == ExecutionStatus.Success ?
                                                 StatusCodes.Status200OK :

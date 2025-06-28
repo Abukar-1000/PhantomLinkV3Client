@@ -4,8 +4,6 @@ using BackgrounderWorker;
 using DeviceSpace;
 using Microsoft.AspNetCore.SignalR.Client;
 using Register.Models;
-using System.Drawing;
-using System.Drawing.Imaging;
 
 namespace DisplaySpace
 {

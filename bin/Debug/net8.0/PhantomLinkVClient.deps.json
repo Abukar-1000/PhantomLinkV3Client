@@ -12,8 +12,10 @@
           "Microsoft.AspNetCore.Http": "2.3.0",
           "Microsoft.AspNetCore.SignalR.Client": "9.0.4",
           "Newtonsoft.Json": "8.0.1",
+          "System.Diagnostics.PerformanceCounter": "9.0.6",
           "System.Drawing.Common": "9.0.5",
-          "System.IO.Hashing": "9.0.4"
+          "System.IO.Hashing": "9.0.4",
+          "System.Management": "9.0.6"
         },
         "runtime": {
           "PhantomLinkVClient.dll": {}
@@ -315,11 +317,72 @@
         }
       },
       "System.Buffers/4.6.0": {},
+      "System.CodeDom/9.0.6": {
+        "runtime": {
+          "lib/net8.0/System.CodeDom.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
+      },
+      "System.Configuration.ConfigurationManager/9.0.6": {
+        "dependencies": {
+          "System.Diagnostics.EventLog": "9.0.6",
+          "System.Security.Cryptography.ProtectedData": "9.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
+      },
       "System.Diagnostics.DiagnosticSource/9.0.4": {
         "runtime": {
           "lib/net8.0/System.Diagnostics.DiagnosticSource.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "System.Diagnostics.EventLog/9.0.6": {
+        "runtime": {
+          "lib/net8.0/System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "0.0.0.0"
+          },
+          "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        }
+      },
+      "System.Diagnostics.PerformanceCounter/9.0.6": {
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "9.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/System.Diagnostics.PerformanceCounter.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Diagnostics.PerformanceCounter.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
           }
         }
       },
@@ -373,6 +436,25 @@
           "lib/net8.0/System.IO.Pipelines.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.425.16305"
+          }
+        }
+      },
+      "System.Management/9.0.6": {
+        "dependencies": {
+          "System.CodeDom": "9.0.6"
+        },
+        "runtime": {
+          "lib/net8.0/System.Management.dll": {
+            "assemblyVersion": "9.0.0.6",
+            "fileVersion": "9.0.625.26613"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net8.0/System.Management.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.6",
+            "fileVersion": "9.0.625.26613"
           }
         }
       },
@@ -456,6 +538,14 @@
           "System.Runtime.InteropServices": "4.3.0",
           "System.Threading": "4.3.0",
           "runtime.native.System": "4.3.0"
+        }
+      },
+      "System.Security.Cryptography.ProtectedData/9.0.6": {
+        "runtime": {
+          "lib/net8.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.625.26613"
+          }
         }
       },
       "System.Text.Encoding/4.3.0": {
@@ -725,12 +815,40 @@
       "path": "system.buffers/4.6.0",
       "hashPath": "system.buffers.4.6.0.nupkg.sha512"
     },
+    "System.CodeDom/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9u1pyEykc0bWBHf1cIVwRoMqrEtxtXdC2ss1K02pvrkwHPcyYmy1glO+kLbyqPO9ehCTl+2dFyUuTUNl1Fde5g==",
+      "path": "system.codedom/9.0.6",
+      "hashPath": "system.codedom.9.0.6.nupkg.sha512"
+    },
+    "System.Configuration.ConfigurationManager/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GQYhl3XCSGhxQvbRCjQiuGbJjm1tlq2lu98SGItjeingM7D+uKNnmKlK0MMuAU1asT7YtJ8uoT83WnGCuna9Qg==",
+      "path": "system.configuration.configurationmanager/9.0.6",
+      "hashPath": "system.configuration.configurationmanager.9.0.6.nupkg.sha512"
+    },
     "System.Diagnostics.DiagnosticSource/9.0.4": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-Be0emq8bRmcK4eeJIFUt9+vYPf7kzuQrFs8Ef1CdGvXpq/uSve22PTSkRF09bF/J7wmYJ2DHf2v7GaT3vMXnwQ==",
       "path": "system.diagnostics.diagnosticsource/9.0.4",
       "hashPath": "system.diagnostics.diagnosticsource.9.0.4.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-lum+Dv+8S4gqN5H1C576UcQe0M2buoRjEUVs4TctXRSWjBH3ay3w2KyQrOo1yPdRs1I+xK69STz+4mjIisFI5w==",
+      "path": "system.diagnostics.eventlog/9.0.6",
+      "hashPath": "system.diagnostics.eventlog.9.0.6.nupkg.sha512"
+    },
+    "System.Diagnostics.PerformanceCounter/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-CrOJB8Iw+XsgD5Tt+PETBdZzWpLEw0FgobKESfcyrn4kxcg9FNz3r1cP5n1c35cTrZNbYCbOnk/xB/0AL1UtLw==",
+      "path": "system.diagnostics.performancecounter/9.0.6",
+      "hashPath": "system.diagnostics.performancecounter.9.0.6.nupkg.sha512"
     },
     "System.Drawing.Common/9.0.5": {
       "type": "package",
@@ -773,6 +891,13 @@
       "sha512": "sha512-luF2Xba+lTe2GOoNQdZLe8q7K6s7nSpWZl9jIwWNMszN4/Yv0lmxk9HISgMmwdyZ83i3UhAGXaSY9o6IJBUuuA==",
       "path": "system.io.pipelines/9.0.4",
       "hashPath": "system.io.pipelines.9.0.4.nupkg.sha512"
+    },
+    "System.Management/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pOc5bCurWL3qVDsPP0iycUCRfXBhI/fVe44SiAlVqoZDIbHP080CLyCzfXV1UbdGKN0hQSLSHqr7OI3BhLBRbA==",
+      "path": "system.management/9.0.6",
+      "hashPath": "system.management.9.0.6.nupkg.sha512"
     },
     "System.Net.ServerSentEvents/9.0.4": {
       "type": "package",
@@ -843,6 +968,13 @@
       "sha512": "sha512-cbz4YJMqRDR7oLeMRbdYv7mYzc++17lNhScCX0goO2XpGWdvAt60CGN+FHdePUEHCe/Jy9jUlvNAiNdM+7jsOw==",
       "path": "system.runtime.interopservices.runtimeinformation/4.3.0",
       "hashPath": "system.runtime.interopservices.runtimeinformation.4.3.0.nupkg.sha512"
+    },
+    "System.Security.Cryptography.ProtectedData/9.0.6": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yErfw/3pZkJE/VKza/Cm5idTpIKOy/vsmVi59Ta5SruPVtubzxb8CtnE8tyUpzs5pr0Y28GUFfSVzAhCLN3F/Q==",
+      "path": "system.security.cryptography.protecteddata/9.0.6",
+      "hashPath": "system.security.cryptography.protecteddata.9.0.6.nupkg.sha512"
     },
     "System.Text.Encoding/4.3.0": {
       "type": "package",

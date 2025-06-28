@@ -1,17 +1,23 @@
 using System.Threading.Tasks;
 using DeviceSpace;
 using DisplaySpace;
+using HardwareSpace;
 using ProcessSpace;
 
-namespace BackgrounderWorker {
+using HardwareBackground = HardwareSpace.BackgrounderWorker;
+
+namespace BackgrounderWorker
+{
     public class BackgroundWorkers
     {
 
         protected ProcessWorker processWorker;
         protected ScreenBroadcasterWorker screenBroadcasterWorker;
+        protected HardwarePerformanceWorker hardwarePerformanceWorker;
 
         protected ProcessWorkerParams processWorkerParams;
         protected ScreenBroadcasterWorkerParams screenBroadcasterWorkerParams;
+        protected HardwareBackground.HardwarePerformanceParams hardwarePerformanceParams;
         protected Device device;
 
         public BackgroundWorkers()
@@ -19,9 +25,11 @@ namespace BackgrounderWorker {
             device = new Device();
             processWorkerParams = new ProcessWorkerParams(true);
             screenBroadcasterWorkerParams = new ScreenBroadcasterWorkerParams(true);
+            hardwarePerformanceParams = new HardwareBackground.HardwarePerformanceParams(true);
 
             this.processWorker = new ProcessWorker(processWorkerParams, device);
             this.screenBroadcasterWorker = new ScreenBroadcasterWorker(screenBroadcasterWorkerParams, device);
+            this.hardwarePerformanceWorker = new HardwarePerformanceWorker(hardwarePerformanceParams, device);
         }
 
         public async Task StartProcessWorker()
@@ -37,6 +45,15 @@ namespace BackgrounderWorker {
             await this.HandleUnexpectedError(
                 async () => await Task.Run(async () => await this.screenBroadcasterWorker.StartScreenMonitor()),
                 this.screenBroadcasterWorkerParams
+            );
+        }
+
+        public async Task StartHardwarePerformanceMonitor()
+        {
+            // await Task.Run(async () => await this.hardwarePerformanceWorker.StartPerformanceMonitor());
+            await this.HandleUnexpectedError(
+                async () => await Task.Run(async () => await this.hardwarePerformanceWorker.StartPerformanceMonitor()),
+                this.hardwarePerformanceParams
             );
         }
 

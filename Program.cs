@@ -39,7 +39,8 @@ class Program
 
         BackgroundWorkers workers = new BackgroundWorkers();
         workers.StartProcessWorker();
-        await workers.StartScreenMonitor();
+        workers.StartScreenMonitor();
+        await workers.StartHardwarePerformanceMonitor();
         
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");

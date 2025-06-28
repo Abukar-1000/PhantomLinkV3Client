@@ -8,7 +8,8 @@ namespace SocketRoutes {
         public static string Server = "http://10.0.0.178:80";
     };
 
-    public class Routes {
+    public class Routes
+    {
 
         [Description("Server Control Route")]
         public static string control = BaseRoutes.Server + "/socket";
@@ -18,5 +19,8 @@ namespace SocketRoutes {
 
         [Description("Server Screen Monitoring Route")]
         public static string screenBroadcasterWorker = BaseRoutes.Server + "/screenBrodcast";
+        
+        [Description("CPU, Memory, Disk, and GPU Monitoring Route")]
+        public static string hardwarePerformanceWorker = BaseRoutes.Server + "/hardware/performance";
     }
 }
