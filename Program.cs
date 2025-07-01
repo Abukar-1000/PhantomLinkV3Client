@@ -5,6 +5,7 @@ using BackgrounderWorker;
 using DeviceSpace;
 using SocketRoutes;
 using ProcessSpace;
+using Microsoft.Extensions.Configuration;
 /*
     - Limit frame creation in Screen broadcast => should limit ram usage
     - Implement mouse movement
@@ -12,10 +13,11 @@ using ProcessSpace;
     - Implement background usage controles => on/off
     - Add CPU, Memory, Disk, Network, GPU Usage broadcast => All encapsed in Hardware
 */
+
 class Program
 {
     static async Task Main(string[] args)
-    {
+    {        
         var connection = new HubConnectionBuilder()
             .WithUrl(Routes.control)
             .WithAutomaticReconnect()
@@ -41,7 +43,7 @@ class Program
         workers.StartProcessWorker();
         workers.StartScreenMonitor();
         await workers.StartHardwarePerformanceMonitor();
-        
+
         // Send a message to the server
         Console.WriteLine("Type messages to send. Type 'exit' to quit.");
         while (true)
