@@ -19,6 +19,7 @@ namespace HardwareSpace
             }
 
             this.value = this.performanceCounter.NextValue();
+            this.value = (float) Math.Round( this.value );
             return this.value;
         }
     }

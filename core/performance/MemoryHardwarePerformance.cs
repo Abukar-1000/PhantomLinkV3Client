@@ -25,7 +25,8 @@ namespace HardwareSpace
             float nextValue = this.performanceCounter.NextValue();
             double usedPercentage = ( this.totalMemoryAvailable - nextValue ) / this.totalMemoryAvailable;
             this.value = (float) usedPercentage * 100;
-
+            this.value = (float) Math.Round( this.value );
+            
             return this.value;
         }
 

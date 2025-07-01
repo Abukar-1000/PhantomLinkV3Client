@@ -50,7 +50,6 @@ namespace BackgrounderWorker
 
         public async Task StartHardwarePerformanceMonitor()
         {
-            // await Task.Run(async () => await this.hardwarePerformanceWorker.StartPerformanceMonitor());
             await this.HandleUnexpectedError(
                 async () => await Task.Run(async () => await this.hardwarePerformanceWorker.StartPerformanceMonitor()),
                 this.hardwarePerformanceParams
@@ -67,7 +66,7 @@ namespace BackgrounderWorker
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"\n\n[{_params.route}] failed with exception \n{ex.Message}");
+                    Console.WriteLine($"\n\n[{_params.route}] failed with exception \n{ex}");
                 }
             }
         }

@@ -23,6 +23,7 @@ namespace HardwareSpace
 
             availableGPUCounters.ForEach(GPUCounter => GPUCounter.NextValue());
             this.value = availableGPUCounters.Sum(GPUCounter => GPUCounter.NextValue());
+            this.value = (float) Math.Round( this.value );
             return this.value;
         }
 
