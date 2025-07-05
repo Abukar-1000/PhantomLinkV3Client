@@ -26,7 +26,7 @@ namespace DisplaySpace
 
         public async Task StartScreenMonitor()
         {
-            const int FRAME_BUFFER_SIZE = 120;
+            const int FRAME_BUFFER_SIZE = 144;
             RegisterFrame registerFrame = _device.GetData();
             string id = registerFrame.id;
             Dimension deviceDimensions = registerFrame.display.dimension;
