@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkVClient\\PhantomLinkVClient.csproj": {}
+    "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkV3Client\\PhantomLinkVClient.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkVClient\\PhantomLinkVClient.csproj": {
+    "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkV3Client\\PhantomLinkVClient.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkVClient\\PhantomLinkVClient.csproj",
+        "projectUniqueName": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkV3Client\\PhantomLinkVClient.csproj",
         "projectName": "PhantomLinkVClient",
-        "projectPath": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkVClient\\PhantomLinkVClient.csproj",
+        "projectPath": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkV3Client\\PhantomLinkVClient.csproj",
         "packagesPath": "C:\\Users\\Abuka\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkVClient\\obj\\",
+        "outputPath": "C:\\Users\\Abuka\\OneDrive\\Desktop\\PhantomLinkV3Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
