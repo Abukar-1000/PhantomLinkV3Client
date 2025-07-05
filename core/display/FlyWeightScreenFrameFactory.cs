@@ -51,9 +51,16 @@ namespace DisplaySpace
                 );
             }
         }
+        
         public ScreenFrame GetFrame()
         {
-            this.graphics.CopyFromScreen(0, 0, 0, 0, this.bitmap.Size);
+            this.graphics.CopyFromScreen(
+                0,
+                0,
+                0,
+                0,
+                this.bitmap.Size
+            );
             this.bitmap.Save(this.stream, ImageFormat.Jpeg);
             this.frames[this.pointer].image = Convert.ToBase64String(this.stream.ToArray());
             return this.frames[this.pointer];
