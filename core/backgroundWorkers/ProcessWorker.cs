@@ -121,18 +121,7 @@ namespace BackgrounderWorker {
             ProcessPool monitor = new();
             var _connection = await ConnectToHub();
             bool isRegistered = await IsRegistered();
-
-            _connection?.On<string>("ProcessUpdateResponse", (message) =>
-            {
-                Console.WriteLine($"Got: {message}");
-            });
-
-            _connection?.On<ProcessKillFrame>("ProcessKillRequest", async (frame) =>
-            {
-                Console.WriteLine($"Kill request Got: {frame.processName}");
-                ProcessPool killMonitor = new();
-                await KillProcess(frame, killMonitor, _connection);
-            });
+            this.HandleRequests(_connection);
 
             while (true)
             {
@@ -167,6 +156,41 @@ namespace BackgrounderWorker {
                 }
                 await Task.Delay(delay);
             }
+        }
+
+        protected async void HandleRequests(HubConnection? connection)
+        {
+            if (connection is null)
+            {
+                return;
+            }
+
+            connection?.On<string>("ProcessUpdateResponse", (message) =>
+            {
+                Console.WriteLine($"Got: {message}");
+            });
+
+            connection?.On<ProcessKillFrame>("ProcessKillRequest", async (frame) =>
+            {
+                Console.WriteLine($"Kill request Got: {frame.processName}");
+                ProcessPool killMonitor = new();
+                await KillProcess(frame, killMonitor, connection);
+            });
+
+            connection?.On<GetAllProcessesFrame>("GetAllProcessesRequest", async (frame) =>
+            {
+                Console.WriteLine($"\n\n[Get All Process Request]\t client: {frame.clientId}\t device: {frame.deviceId}\t");
+
+                foreach (ProcessSnapshot processSnapshot in _lookUp.Values)
+                { 
+                    await connection?.InvokeAsync("GetAllProcessesResponse", new GetAllProcessesResponse(
+                        frame.clientId,
+                        frame.deviceId,
+                        processSnapshot
+                    ));
+                }
+
+            });
         }
 
         protected async Task KillProcess(
